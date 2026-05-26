@@ -33,4 +33,3 @@ Wanderlust is a professional, full-stack web application (like AirBnB) that allo
 - **Authentication:** Passport.js (Local Strategy).
 - **Storage:** Cloudinary API.
 - **Middleware:** Method-Override, Connect-Flash, Cookie-Parser.
--
