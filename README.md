@@ -1,6 +1,6 @@
-# 🌍 Wanderlust - Full Stack Travel Platform
+# 🌍 WanderPulse - Full Stack Airbnb Platform
 
-Wanderlust is a professional, full-stack web application (like AirBnB) that allows users to discover, list, and review unique accommodations worldwide. Built with the **MVC (Model-View-Controller)** architecture, it features secure authentication, cloud-based image management, and a robust database.
+WanderPulse is a professional, full-stack web application (like AirBnB) that allows users to discover, list, and review unique accommodations worldwide. Built with the **MVC (Model-View-Controller)** architecture, it features secure authentication, cloud-based image management, and a robust database.
 
 ---
 
