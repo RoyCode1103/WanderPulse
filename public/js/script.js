@@ -1,4 +1,4 @@
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+
 (() => {
   'use strict'
 
@@ -15,5 +15,8 @@
 
       form.classList.add('was-validated')
     }, false)
-  })
-})()
+  });
+})();
+if (window.isLoggedIn === "true") {
+   console.log("User logged in");
+}

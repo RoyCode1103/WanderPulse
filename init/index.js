@@ -1,27 +1,59 @@
+require('dotenv').config({ path: "../.env" });
 const mongoose = require("mongoose");
-const initData = require("./data.js");
 const Listing = require("../models/listing.js");
+const User = require("../models/user.js");
+const data = require("./data.js");
 
-let PORT = 8080;
+const dbUrl = process.env.ATLASDB_URL;
 
-//setting up database
-async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/WanderPulse');
-}
+const OWNER_ID = new mongoose.Types.ObjectId("69a30443065186f409b2f389");
+const OWNER_USERNAME = "shruti";
+const OWNER_EMAIL = "shruti@123gmail.com";
 
-main()
-.then((res)=>{
-    console.log("Connected to DB");
-})
-.catch((err)=>{
-    console.log(err);
-});
+async function initDB() {
+  try {
+    if (!dbUrl) {
+      throw new Error("ATLASDB_URL is not defined in .env file");
+    }
 
-const initDB = async () =>{
+    await mongoose.connect(dbUrl);
+    console.log("Connected to MongoDB Atlas");
+
+    // 🔹 Create user if not exists
+    let user = await User.findById(OWNER_ID);
+
+    if (!user) {
+      user = new User({
+        _id: OWNER_ID,
+        username: OWNER_USERNAME,
+        email: OWNER_EMAIL,
+      });
+
+      await User.register(user, "password123");
+      console.log("User 'shruti' created in Atlas");
+    } else {
+      console.log("User 'shruti' already exists in Atlas");
+    }
+
+    // 🔹 Delete old listings in Atlas
     await Listing.deleteMany({});
-    initData.data = initData.data.map((obj)=> ({...obj, owner: "6a106838487b74771f9cc40c"}));
-    await Listing.insertMany(initData.data);
-    console.log("Data was initilized");
+    console.log("Old listings deleted from Atlas");
+
+    // 🔹 Add owner reference
+    const listingsWithOwner = data.data.map((obj) => ({
+      ...obj,
+      owner: user._id, 
+    }));
+
+    // 🔹 Insert listings into Atlas
+    await Listing.insertMany(listingsWithOwner);
+    console.log("Real listings from data.js inserted into Atlas!");
+
+    mongoose.connection.close();
+  } catch (err) {
+    console.error("Initialization Error:", err);
+    mongoose.connection.close();
+  }
 }
 
 initDB();

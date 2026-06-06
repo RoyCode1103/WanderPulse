@@ -1,0 +1,14 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2>New Review Saved</h2>
+
+<h3>All Reviews:</h3>
+
+<% listing.reviews.forEach(review => { %>
+
+  <div style="border:1px solid gray; padding:10px; margin:10px;">
+    <p><strong>Rating:</strong> <%= review.rating %></p>
+    <p><%= review.comment %></p>
+  </div>
+
+<% }) %>

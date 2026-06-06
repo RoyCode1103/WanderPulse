@@ -1,20 +1,51 @@
-<%layout("/layouts/boilerplate")%>
+<% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-    <h1 class="col-6 offset-3">Login</h1>
-    <div class="col-6 offset-3">
-        <form action="/login" method="post" class="needs-validation" novalidate>
-            <div class="mb-3">
-            <label for="Username" class="form-label">Username</label>
-            <input name="username" id="username" type="text" class="form-control" required>
-        </div>
+<div class="row mt-5">
+  <div class="col-6 offset-3">
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input name="password" id="password" type="password" class="form-control" required>
-        </div>
+    <h2 class="mb-4 text-center">Log in</h2>
 
-        <button class="btn btn-success">Login</button>
-        </form>
-    </div>
+    <form action="/login" method="POST" novalidate class="needs-validation">
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="form-control"
+          required
+        >
+        <div class="invalid-feedback">Enter Username!</div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="form-control"
+          required
+        >
+        <div class="valid-feedback">Password looks Strong!</div>
+        <div class="invalid-feedback">Please enter Strong Password!</div>
+      </div>
+
+      <!-- Button -->
+      <button class="btn btn-success w-100">
+        Login
+      </button>
+
+    </form>
+
+    <!-- Signup link -->
+    <p class="mt-3 text-center">
+      Don't have an account?
+      <a href="/signup">Sign up</a>
+    </p>
+
+  </div>
 </div>

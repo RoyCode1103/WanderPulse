@@ -1,60 +1,186 @@
 <style>
+  /* 1. Container Setup */
+  .search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+  }
+
+  /* 2. Search Input - Alag Oval Shape */
+  .search-inp {
+    border-radius: 50px !important; /* Full Oval */
+    padding: 0.7rem 1.5rem !important;
+    border: 1px solid #ced4da !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    min-width: 450px; 
+    transition: 0.3s;
+  }
+
+  .search-inp:focus {
+    border-color: #fe424d !important;
+    box-shadow: 0 4px 12px rgba(254, 66, 77, 0.15) !important;
+    outline: none;
+  }
+
+  /* 3. Search Button - Alag Oval Shape */
   .search-btn {
-    background-color: #fe424d;
-    color: white;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    background-color: #fe424d !important;
+    color: #fff !important;
+    border-radius: 50px !important; /* Full Oval */
+    padding: 0.5rem 1.8rem !important;
+    border: none !important;
+    margin-left: 1rem !important; /* Dono ke beech ka gap */
+    transition: 0.3s;
+    white-space: nowrap;
+    font-weight: 500;
   }
 
   .search-btn:hover {
-    background-color: #fe424d;
-    color: white;
+    background-color: #e63946 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
   }
 
-  .search-btn i {
-    display: inline;
-    margin-right: 0.5rem;
+  /* 4. Recommendations Box - Input ki width ke hisaab se */
+  #search-results-box {
+    position: absolute;
+    top: 115%;
+    left: 0;
+    width: calc(100% - 120px); /* Button ki width ko minus karke adjust kiya */
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: none;
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #eee;
   }
 
-  .search-inp{
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
+  .result-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .result-item:hover {
+    background-color: #f7f7f7;
+    border-radius: 20px;
+  }
+
+  .result-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 15px;
+  }
+
+  /* Responsive Fix for Mobile */
+  @media (max-width: 768px) {
+    .search-inp { min-width: 180px; }
+    .search-btn { margin-left: 0.5rem !important; padding: 0.5rem 1rem !important; }
+    .search-btn span { display: none; }
+    #search-results-box { width: 100%; }
   }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
-    <button
-     class="navbar-toggler"
-     type="button" 
-     data-bs-toggle="collapse"
-     data-bs-target="#navbarNavAltMarkup" 
-     >
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-regular fa-compass"></i>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link" href="/listings">Explore</a>
       </div>
 
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-        <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations" />
-        <button class="btn search-btn" type="submit"> <i class="fa-solid fa-magnifying-glass"></i>Search</button>
-      </form>
-       </div>
+      <div class="search-wrapper mx-auto mt-2 mt-md-0 d-flex align-items-center">
+        <form class="d-flex w-100 align-items-center" role="search" action="/listings" method="GET" autocomplete="off">
+          <input 
+            id="main-search"
+            class="form-control search-inp" 
+            type="search" 
+            name="q" 
+            placeholder="Search destinations..."
+            value="<%= typeof q !== 'undefined' ? q : '' %>" 
+          />
+          <button class="btn search-btn d-flex align-items-center" type="submit">
+            <i class="fa-solid fa-magnifying-glass me-md-2"></i>
+            <span>Search</span>
+          </button>
+        </form>
 
-      <div class="navbar-nav ms-auto">
+        <div id="search-results-box"></div>
+      </div>
+
+      <div class="navbar-nav">
         <a class="nav-link" href="/listings/new">Airbnb your home</a>
-        <% if(!currUser){%>
-          <a class="nav-link"  href="/signup"><b>sign up</b></a>
+        <% if(!currUser) { %>
+          <a class="nav-link" href="/signup"><b>Sign up</b></a>
           <a class="nav-link" href="/login"><b>Login</b></a>
-        <%}%>
-        <% if(currUser){%>
-        <a class="nav-link" href="/logout"><b>Log out</b></a>
-        <%}%>
+        <% } else { %>
+          <a class="nav-link" href="/logout"><b>Log out</b></a>
+        <% } %>
       </div>
     </div>
   </div>
 </nav>
+
+<script>
+  const allListings = <%- JSON.stringify(typeof allTitles !== 'undefined' ? allTitles : []) %>;
+  const searchInput = document.getElementById('main-search');
+  const resultsBox = document.getElementById('search-results-box');
+
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    resultsBox.innerHTML = ''; 
+
+    if (query.length > 0) {
+      const filtered = allListings.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.location.toLowerCase().includes(query)
+      ).slice(0, 6); 
+
+      if (filtered.length > 0) {
+        resultsBox.style.display = 'block';
+        filtered.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'result-item';
+          const imgUrl = item.image && item.image.url ? item.image.url : '/path/to/default-image.jpg';
+          
+          div.innerHTML = `
+            <img src="${imgUrl}" class="result-img" alt="img">
+            <div class="result-info">
+              <b>${item.title}</b>
+              <span><i class="fa-solid fa-location-dot"></i> ${item.location}, ${item.country}</span>
+            </div>
+          `;
+          div.onclick = () => {
+            searchInput.value = item.title;
+            resultsBox.style.display = 'none';
+            searchInput.form.submit(); 
+          };
+          resultsBox.appendChild(div);
+        });
+      } else {
+        resultsBox.style.display = 'none';
+      }
+    } else {
+      resultsBox.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!document.querySelector('.search-wrapper').contains(e.target)) {
+      resultsBox.style.display = 'none';
+    }
+  });
+</script>
