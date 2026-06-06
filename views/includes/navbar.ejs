@@ -133,7 +133,7 @@
 </nav>
 
 <script>
-  const allListings = <%- JSON.stringify(typeof allTitles !== 'undefined' ? allTitles : []) %>;
+  const allListings = <%-JSON.stringify(typeof allTitles !== 'undefined' ? allTitles : [])%>;
   const searchInput = document.getElementById('main-search');
   const resultsBox = document.getElementById('search-results-box');
 

@@ -4,8 +4,8 @@
   },
   "name": "wanderpulse",
   "version": "1.0.0",
-  "description": "Your Traveling Partner",
-  "main": "index.js",
+  "description": "Your Travelling Partner",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
