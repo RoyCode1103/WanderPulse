@@ -10,7 +10,7 @@ module.exports.listingSchema = Joi.object({
     country: Joi.string().required(),
     image: Joi.string().allow("", null), // Image ko allow karna zaroori hai
     
-    // ⭐ CATEGORY VALIDATION ADDED HERE
+    //CATEGORY VALIDATION ADDED HERE
     category: Joi.string().valid(
       "trending", 
       "rooms", 
