@@ -7,8 +7,8 @@ const data = require("./data.js");
 const dbUrl = process.env.ATLASDB_URL;
 
 const OWNER_ID = new mongoose.Types.ObjectId("69a30443065186f409b2f389");
-const OWNER_USERNAME = "shruti";
-const OWNER_EMAIL = "shruti@123gmail.com";
+const OWNER_USERNAME = "Devil";
+const OWNER_EMAIL = "devil@123gmail.com";
 
 async function initDB() {
   try {
@@ -30,9 +30,9 @@ async function initDB() {
       });
 
       await User.register(user, "password123");
-      console.log("User 'shruti' created in Atlas");
+      console.log("User 'devil' created in Atlas");
     } else {
-      console.log("User 'shruti' already exists in Atlas");
+      console.log("User 'devil' already exists in Atlas");
     }
 
     // 🔹 Delete old listings in Atlas
